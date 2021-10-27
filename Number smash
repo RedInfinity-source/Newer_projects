@@ -1,0 +1,85 @@
+import random
+#game info
+number_list = []
+number = random.randint(1,9)
+player_health = 100
+#space
+space = ''
+#game running
+game = True
+#check
+#this is to chech the users input
+check = True
+#game
+while game:
+    # player number
+    player_number = random.randint(1, 9)
+    #number list
+    for x in range(9):
+        number_list = str(number) + ' ' + str(random.randint(1,9))
+        number = number_list
+    #print area
+    #users health
+    print('your health: ' + str(player_health))
+    #bord print
+    print('        1 2 3 4 5 6 7 8 9 10')
+    print('*****************************')
+    print('       ',number_list)
+    print(player_number)
+    #checking users input
+    check = True
+    while check:
+        player_placement = int(input('> '))
+        if player_placement > 10:
+            print('sorry you can go higher than 10')
+        elif player_placement < 1:
+            print('sorry you can have a number lower than 1')
+        else:
+            player_placement = player_placement
+            check = False
+    #proper spacing
+    if player_placement == 1:
+        space = ' ' * 3
+    if player_placement == 2:
+        space = ' ' * 5
+    if player_placement == 3:
+        space = ' ' * 7
+    if player_placement == 4:
+        space = ' ' * 9
+    if player_placement == 5:
+        space = ' ' * 11
+    if player_placement == 6:
+        space = ' ' * 13
+    if player_placement == 7:
+        space = ' ' * 15
+    if player_placement == 8:
+        space = ' ' * 17
+    if player_placement == 9:
+        space = ' ' * 19
+    if player_placement == 10:
+        space = ' ' * 21
+    player_number = player_number
+    player_placement = player_placement
+    print('Num: ' + space + str(player_number))
+    #health check
+    count = -1
+    for x in number_list:
+        count += 1
+        if x == 0:
+            game = False
+        if x == ' ':
+            count += 1
+        elif int(x) <= player_number and count == (player_placement - 1) or count == (player_placement - 1) and int(x) <= player_number:
+            break
+        elif int(x) >= player_number and count == (player_placement - 1) or count == (player_placement - 1) and int(x) >= player_number:
+            player_health = player_health - (int(x) - player_number)
+            player_health = player_health
+        elif count <= (player_placement - 1):
+            pass
+    player_health = player_health
+    # updates
+    number_list = []
+    number = random.randint(1, 9)
+    print('')
+    if player_health <= 0:
+        game = False
