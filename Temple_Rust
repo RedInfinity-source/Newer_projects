@@ -1,0 +1,103 @@
+import random
+import time
+#bad and good lists
+Good_list = ['turns out your map was upside down','dispute you taking the wrong direction, you knew where you were going','you found a loop that lead back to the main path','your map was up to date','you almost ran into a trap','cool moves bro','while looking at the map you avoided a trap','one of the traps fell asleep','ok Tarzan!',"ummm I didn't release the trap on purpose",'did you sign up for the lottery yet?','I swear I was paying attention',"you're too fast",'no traps on sundays','oh man i forgot ot pay rent, i will be right back']
+Bad_list = ['you lost your map', 'you are now stuck', 'your map is unfinished', 'you picked up the wrong map','you took the wrong direction', 'you found out you are in the wrong location','you forgot to leave a notes for you boss','you just remembered','you forgot to turn off your stove','your moves are to cool and i was jealous','to slow','guess what! TREE!','you stubbed your toe','you looked at your map but fell through the cracks','oh look, bird!','your map is wet','you forgot to bring supplies']
+#direction lists
+cardinal_directions = ['straightforward','backward','left','right','up','down','']
+actions_list = ['walk','run','jog','jump','crouch','slide','swim','climb','carol','open the door']
+actions = []
+#you
+dead = False
+while True:
+    #writting out
+    direction = random.choice(cardinal_directions)
+    for word in cardinal_directions:
+        if word == '' and direction == '':
+            actions = ['open the door']
+        if word == 'straightforward' and direction == 'straightforward':
+            actions = ['walk','run','jog','jump','slide','swim','carol']
+        elif word == 'backward' and direction == 'backward':
+            actions = ['walk','run','jog','jump','slide','swim','carol']
+        elif word == 'left' and direction == 'left':
+            actions = ['walk','run','jog','jump','slide','swim','climb','carol']
+        elif word == 'right' and direction == 'right':
+            actions = ['walk','run','jog','jump','slide','swim','climb','carol']
+        elif word == 'up' and direction == 'up':
+            actions = ['jump','slide','swim','climb']
+        elif word == 'down' and direction == 'down':
+            actions = ['jump','slide','climb']
+        else:
+            pass
+    actions = actions
+    action = random.choice(actions)
+    #add s
+    if direction == 'backward':
+        s = 's'
+    else:
+        s = ''
+    #space
+    if direction == '':
+        space = ''
+    else:
+        space = ' '
+    #print
+    do = input('would you like to ' + action + space + direction + s + '? ')
+    if do == 'yes':
+        rate_list = ['successful','unsuccessful']
+        print('your action was...')
+        #time.sleep(3)
+        rate = random.choice(rate_list)
+        print(rate)
+        chooice = random.randint(0, 1)
+        #successful
+        if chooice == 1 and rate == 'successful':
+            print(random.choice(Good_list))
+        #unsuccessful
+        if chooice == 1 and rate == 'unsuccessful':
+            if action == 'open door':
+                Good_list = ['the door filed to open']
+            print('you are lucky today')
+            print(random.choice(Good_list))
+        if chooice == 0 and rate == 'unsuccessful':
+            print(random.choice(Bad_list))
+            dead = True
+    elif do == 'no':
+        rate_list = ['successful', 'unsuccessful']
+        print('your action was...')
+        #time.sleep(3)
+        rate = random.choice(rate_list)
+        print(rate)
+        chooice = random.randint(0,2)
+        # successful
+        if chooice == 1 and rate == 'successful':
+            if action == 'open door':
+                Good_list = ['the door filed to open']
+            print('you are lucky today')
+            print(random.choice(Good_list))
+        #unsuccessful
+        if chooice == 2 and rate == 'unsuccessful':
+            print("you didn't know were to go and you lost your map.")
+            dead = True
+        if chooice == 1 and rate == 'unsuccessful':
+            if action == 'open door':
+                Good_list = ['the door filed to open']
+            print('you are lucky today')
+            print(random.choice(Good_list))
+        if chooice == 0 and rate == 'unsuccessful':
+            print(random.choice(Bad_list))
+            dead = True
+    else:
+        print("you didn't know were to go and you lost your map")
+        dead = True
+    if dead == True:
+        print("you are now lost forever")
+        while dead:
+            play = input('would you like to play again? ')
+            if play == 'yes':
+                print('*' * 64)
+                dead = False
+            elif play == 'no':
+                quit()
+            else:
+                print('sorry',play,'is not an option')
