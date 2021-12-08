@@ -1,0 +1,160 @@
+import time
+import pygame, sys, random
+pygame.init()
+# window
+WIDTH = 800
+HEIGHT = 800
+screen = pygame.display.set_mode((WIDTH, HEIGHT))
+pygame.display.set_caption('City Game')
+# colors
+RED = (255, 0, 0)
+GREEN = (0, 255, 0)
+BLUE = (0, 0, 255)
+WHITE = (255,255,255)
+BLACK = (0,0,0)
+# text font
+font = pygame.font.SysFont('times', 13)
+# map
+map_img = pygame.image.load(r"C:\Users\tower\Pictures\Saved Pictures\images.jfif")
+map_img.convert()
+x = 50
+y = 50
+box_width = 750
+box_height = 750
+# materials
+# resources
+food = 0
+water = 0
+# building materials
+stone = 0
+wood = 0
+glass = 0
+# general
+gold = 0
+# population
+population = 0
+# percentce
+housed = 0
+jobs = 0
+environment = 0
+happiness = 0
+# tourism
+people = 0
+# side panel buttons
+class Button:
+    def __init__(self, width, height, button_x, button_y, color, hover_color, text, text_size, text_color):
+        self.width = width
+        self.height = height
+        self.button_x = button_x
+        self.button_y = button_y
+        self.color = color
+        self.hover_color = hover_color
+        self.text = text
+        self.text_size = text_size
+
+        # Set up the text that will be on top of the button
+        self.font = pygame.font.SysFont('times', 13)
+        self.screen_text = self.font.render(text, True, text_color)
+        self.text_rect = self.screen_text.get_rect()
+        self.text_rect.center = (button_x + self.width / 2, button_y + self.height / 2)
+
+        # Draw the button and draw the text on the button
+        pygame.draw.rect(screen, self.color, (self.button_x, self.button_y, self.width, self.height))
+        screen.blit(self.screen_text, self.text_rect)
+
+    def action(self, action=None):
+        # Get the mouse position and the button pressed
+        mouse = pygame.mouse.get_pos()
+        click = pygame.mouse.get_pressed()
+
+        # Check if the mouse is inside the button
+        if self.button_x + self.width > mouse[0] > self.button_x and self.button_y + self.height > mouse[1] > self.button_y:
+            pygame.draw.rect(screen, self.hover_color, (self.button_x, self.button_y, self.width, self.height))
+            screen.blit(self.screen_text, self.text_rect)
+
+            # Check if left mouse button is clicked
+            if click[0] == 1:
+                action()
+#exit option
+def game_quit():
+	pygame.quit()
+	sys.exit()
+
+# game
+running = True
+while running:
+    pygame.display.flip()
+    for event in pygame.event.get():
+        # quit game
+        if event.type == pygame.QUIT:
+            running = False
+    screen.fill((0, 0, 0))
+    # map display
+    game_map = pygame.transform.scale(map_img, (box_width, box_height))
+    screen.blit(game_map, (x, y))
+    # population stats
+    pop_text = font.render('population: ' + str(population), 1, (0, 153, 0))
+    housed_text = font.render('housed: ' + str(housed) + '%', 1, (255, 0, 250))
+    job_text = font.render('population working: ' + str(jobs) + '%', 1, (0, 142, 250))
+    happiness_text = font.render('happiness: ' + str(happiness) + '%', 1, (0, 255, 0))
+    # materials stats
+    food_text = font.render('food: ' + str(food), 1, (255, 0, 0))
+    water_text = font.render('water: ' + str(stone), 1, (0, 0, 255))
+    stone_text = font.render('stone: ' + str(stone), 1, (192, 192, 192))
+    wood_text = font.render('wood: ' + str(wood), 1, (186, 140, 99))
+    glass_text = font.render('glass: ' + str(wood), 1, (0, 222, 255))
+    gold_text = font.render('gold: ' + str(gold), 1, (255, 215, 0))
+    # print top text
+        # population
+    screen.blit(pop_text, (50, 10))
+    screen.blit(housed_text, (145, 10))
+    screen.blit(job_text, (229, 10))
+    screen.blit(happiness_text, (383, 10))
+        # material
+    screen.blit(food_text, (50, 30))
+    screen.blit(water_text, (109, 30))
+    screen.blit(stone_text, (170, 30))
+    screen.blit(wood_text, (233, 30))
+    screen.blit(glass_text, (296, 30))
+    screen.blit(gold_text, (357, 30))
+
+    # side panel options
+    build_text = font.render('BUILD', 1, (255, 255, 255))
+    screen.blit(build_text, (5, 50))
+    menue_text = font.render('MENUE', 1, (255, 255, 255))
+    screen.blit(menue_text, (2, 275))
+    # buttons builds
+    Houses = Button(50, 40, 0, 70, (255, 0, 0), (255, 204, 204), 'Houses', 15, WHITE)
+    Houses.action()
+    Factories = Button(50, 40, 0, 110, (255, 0, 250), (255, 204, 204), 'Factories', 15, WHITE)
+    Factories.action(game_quit)
+    Mines = Button(50, 40, 0, 150, (128, 128, 128), (255, 204, 204), 'Mines', 15, WHITE)
+    Mines.action(game_quit)
+    Plants = Button(50, 40, 0, 190, (0, 0, 255), (255, 204, 204), 'Plants', 15, WHITE)
+    Plants.action(game_quit)
+    Parks = Button(50, 40, 0, 230, (0, 200,0), (255, 204, 204), 'Parks', 15, WHITE)
+    Parks.action(game_quit)
+    # buttons menue
+    Zoom_in = Button(50, 40, 0, 295, (255, 128, 0), (255, 204, 204), '+', 15, WHITE)
+    Zoom_in.action(game_quit)
+    Zoom_out = Button(50, 40, 0, 335, (255, 128, 0), (255, 204, 204), '-', 15, WHITE)
+    Zoom_out.action(game_quit)
+    Exit = Button(50, 40, 0, 385, (102, 178, 255), (255, 204, 204), 'Exit', 15, WHITE)
+    Exit.action(game_quit)
+    # tourism
+    tourism = random.randint(1,1000)
+    if tourism == 1000000000000000:
+        people = random.randint(2,5)
+        population += people
+    # print tourism
+    pygame.draw.rect(screen,(0,0,0), pygame.Rect(58, 60, 170, 30))
+    tourism_font = pygame.font.SysFont('times', 20)
+    tourism_text = tourism_font.render(str(people) + ' Tours have arrived',1, (255,255,255))
+    screen.blit(tourism_text, (60, 60))
+    # win
+    if food == 999 or water == 999 or stone == 999 or wood == 999 or glass == 999 or gold == 999 or population == 999:
+        end_game_font = pygame.font.SysFont('times', 100)
+        end_game_text = end_game_font.render('You have won!!', 1, (255, 255, 255))
+        screen.blit(end_game_text, (100, 300))
+    # update
+    pygame.display.update()
