@@ -40,6 +40,15 @@ environment = 0
 happiness = 0
 # tourism
 people = 0
+display_text = 0
+# total
+homes_built = 0
+mine_mine = 0
+factory_built = 0
+mines_built = 0
+plants_built = 0
+parks_built = 0
+total = homes_built + mine_mine + factory_built + mines_built + plants_built + parks_built
 # side panel buttons
 class Button:
     def __init__(self, width, height, button_x, button_y, color, hover_color, text, text_size, text_color):
@@ -75,11 +84,121 @@ class Button:
             # Check if left mouse button is clicked
             if click[0] == 1:
                 action()
+# Build
+def Home1():
+    global food, water, stone, wood, glass, gold, population,homes_built,housed
+    if food >= 5 and water >= 5 and stone >= 3 and wood >= 3 and glass >= 1 and gold >= 1 and population >= 5:
+        food -= 5
+        water -= 5
+        stone -= 3
+        wood -= 3
+        glass -= 1
+        gold -= 1
+        pygame.draw.rect(screen,(255, 0, 0), pygame.Rect(random.randint(50,800),random.randint(50,800),10,10))
+        homes_built += 1
+        constructed_font = pygame.font.SysFont('times', 20)
+        constructed = constructed_font.render('You built that', 1, (255, 255, 255))
+        return screen.blit(constructed, (50, 90))
+        return housed + 1
+    else:
+        sorry_font = pygame.font.SysFont('times', 20)
+        sorry = sorry_font.render('Sorry you can not build that',1, (255,255,255))
+        return screen.blit(sorry, (50, 90))
+def Mine1():
+    global food, water, stone, wood, glass, gold, population, mines_built,gold,stone,jobs
+    if food >= 0 and water >= 5 and stone >= 0 and wood >= 5 and glass >= 0 and gold >= 5 and population >= 5:
+        food -= 0
+        water -= 5
+        stone -= 0
+        wood -= 5
+        glass -= 0
+        gold -= 5
+        pygame.draw.rect(screen,(128, 128, 128), pygame.Rect(random.randint(50,800),random.randint(50,800),10,10))
+        jobs += 1
+        R = random.randint(1, 100)
+        if R == 100:
+            gold += random.randint(1,10)
+        stone += 1
+        constructed_font = pygame.font.SysFont('times', 20)
+        constructed = constructed_font.render('You built that', 1, (255,0,0))
+        return screen.blit(constructed, (50, 90))
+        return mines_built + 1
+    else:
+        sorry_font = pygame.font.SysFont('times', 20)
+        sorry = sorry_font.render('Sorry you can not build that',1, (255,255,255))
+        return screen.blit(sorry, (50, 90))
+def Factory1():
+    global food, water, stone, wood, glass, gold, population, factory_built,food, wood, glass, jobs
+    if food >= 0 and water >= 5 and stone >= 4 and wood >= 3 and glass >= 3 and gold >= 3 and population >= 3:
+        food -= 0
+        water -= 5
+        stone -= 4
+        wood -= 3
+        glass -= 3
+        gold -= 3
+        pygame.draw.rect(screen,(255, 0, 250), pygame.Rect(random.randint(50,800),random.randint(50,800),10,10))
+        factory_built += 1
+        jobs += 1
+        R = random.randint(1, 100)
+        if R == 33:
+            food += 1
+        if R == 66:
+            wood += 1
+        if R == 100:
+            glass += 1
+        constructed_font = pygame.font.SysFont('times', 20)
+        constructed = constructed_font.render('You built that', 1, (255,0,0))
+        return screen.blit(constructed, (50, 90))
+        return factory_built + 1
+    else:
+        sorry_font = pygame.font.SysFont('times', 20)
+        sorry = sorry_font.render('Sorry you can not build that',1, (255,255,255))
+        return screen.blit(sorry, (50, 90))
+def Plant1():
+    global food, water, stone, wood, glass, gold, population, plants_built, water, jobs
+    if food >= 5 and water >= 5 and stone >= 3 and wood >= 0 and glass >= 2 and gold >= 3 and population >= 5:
+        food -= 5
+        water -= 5
+        stone -= 3
+        wood -= 0
+        glass -= 2
+        gold -= 3
+        pygame.draw.rect(screen, (0, 0, 255), pygame.Rect(random.randint(50, 800), random.randint(50, 800), 10, 10))
+        plants_built += 1
+        jobs += 1
+        water += 1
+        constructed_font = pygame.font.SysFont('times', 20)
+        constructed = constructed_font.render('You built that', 1, (255,0,0))
+        return screen.blit(constructed, (50, 90))
+        return plants_built + 1
+    else:
+        sorry_font = pygame.font.SysFont('times', 20)
+        sorry = sorry_font.render('Sorry you can not build that',1, (255,255,255))
+        return screen.blit(sorry, (50, 90))
+def Park1():
+    global food, water, stone, wood, glass, gold, population, parks_built, happiness
+    if food >= 0 and water >= 5 and stone >= 0 and wood >= 1 and glass >= 0 and gold >= 5 and population >= 1:
+        food -= 0
+        water -= 5
+        stone -= 0
+        wood -= 1
+        glass -= 0
+        gold -= 5
+        pygame.draw.rect(screen, (0, 200,0), pygame.Rect(random.randint(50, 800), random.randint(50, 800), 10, 10))
+        parks_built += 1
+        happiness += random.randint(1,20)
+        constructed_font = pygame.font.SysFont('times', 20)
+        constructed = constructed_font.render('You built that', 1, (255,0,0))
+        return screen.blit(constructed, (50, 90))
+        return parks_built + 1
+    else:
+        sorry_font = pygame.font.SysFont('times', 20)
+        sorry = sorry_font.render('Sorry you can not build that',1, (255,255,255))
+        return screen.blit(sorry, (50, 90))
 #exit option
 def game_quit():
 	pygame.quit()
 	sys.exit()
-
 # game
 running = True
 while running:
@@ -97,6 +216,7 @@ while running:
     housed_text = font.render('housed: ' + str(housed) + '%', 1, (255, 0, 250))
     job_text = font.render('population working: ' + str(jobs) + '%', 1, (0, 142, 250))
     happiness_text = font.render('happiness: ' + str(happiness) + '%', 1, (0, 255, 0))
+    total_text = font.render('total buildings: ' + str(total), 1, (255, 255, 255))
     # materials stats
     food_text = font.render('food: ' + str(food), 1, (255, 0, 0))
     water_text = font.render('water: ' + str(stone), 1, (0, 0, 255))
@@ -110,6 +230,7 @@ while running:
     screen.blit(housed_text, (145, 10))
     screen.blit(job_text, (229, 10))
     screen.blit(happiness_text, (383, 10))
+    screen.blit(total_text, (490, 10))
         # material
     screen.blit(food_text, (50, 30))
     screen.blit(water_text, (109, 30))
@@ -117,44 +238,167 @@ while running:
     screen.blit(wood_text, (233, 30))
     screen.blit(glass_text, (296, 30))
     screen.blit(gold_text, (357, 30))
-
     # side panel options
     build_text = font.render('BUILD', 1, (255, 255, 255))
     screen.blit(build_text, (5, 50))
     menue_text = font.render('MENUE', 1, (255, 255, 255))
     screen.blit(menue_text, (2, 275))
+    # flouid marker
+    if food >= 0:
+        R = random.randint(1,1000)
+        if R == 1000:
+            food -= 1
+    if population >= food:
+        R = random.randint(1, 1000)
+        if R == 1000:
+            food -= 1
+    if population >= water:
+        R = random.randint(1, 1000)
+        if R == 1000:
+            water -= 1
+    if population > 0:
+        for a in range(population):
+            R = random.randint(1, 10000)
+            if R == 1000:
+                gold += random.randint(0,1)
+            if R == 500:
+                R = random.randint(1, 10)
+                if R == 10:
+                    housed += random.randint(0,population)
+                    happiness -= 1
+    # less than zero checker
+    if food <= -1:
+        food = 0
+    if water <= -1:
+        water = 0
+    if population <= -1:
+        population = 0
+    # meta counter
+    if factory_built > 0:
+        R = random.randint(1, 100)
+        if R == 33:
+            food += 1
+        if R == 66:
+            wood += 1
+        if R == 100:
+            glass += 1
+    if mines_built > 0:
+        R = random.randint(1, 100)
+        if R == 50:
+            stone += 1
+        if R == 100:
+            gold += 1
+    if plants_built > 0:
+        R = random.randint(1, 100)
+        if R == 50:
+            water += 1
+    if parks_built > 0:
+        R = random.randint(1, 100)
+        if R == 50:
+            happiness += 1
+    # top counter
+    if homes_built >= 250:
+        R = random.randint(1, 100)
+        if R == 100:
+            happiness += random.randint(0,10)
+            housed += random.randint(0,10)
+    if factory_built >= 250:
+        R = random.randint(1, 100)
+        if R == 100:
+            happiness += random.randint(0,10)
+            food += random.randint(0,10)
+            wood += random.randint(0,10)
+            glass += random.randint(0,10)
+    if mines_built >= 250:
+        R = random.randint(1, 100)
+        if R == 100:
+            happiness += random.randint(0, 10)
+            stone += random.randint(0,10)
+            R2 = random.randint(1,1000)
+            if R2 == 1000:
+                gold += random.randint(0,10)
+    if plants_built >= 250:
+        R = random.randint(1, 100)
+        if R == 100:
+            happiness += random.randint(0, 10)
+            water += random.randint(0, 10)
+    if parks_built >= 250:
+        R = random.randint(1, 100)
+        if R == 100:
+            happiness += random.randint(0, 20)
     # buttons builds
     Houses = Button(50, 40, 0, 70, (255, 0, 0), (255, 204, 204), 'Houses', 15, WHITE)
-    Houses.action()
+    Houses.action(Home1)
     Factories = Button(50, 40, 0, 110, (255, 0, 250), (255, 204, 204), 'Factories', 15, WHITE)
-    Factories.action(game_quit)
+    Factories.action(Factory1)
     Mines = Button(50, 40, 0, 150, (128, 128, 128), (255, 204, 204), 'Mines', 15, WHITE)
-    Mines.action(game_quit)
+    Mines.action(Mine1)
     Plants = Button(50, 40, 0, 190, (0, 0, 255), (255, 204, 204), 'Plants', 15, WHITE)
-    Plants.action(game_quit)
+    Plants.action(Plant1)
     Parks = Button(50, 40, 0, 230, (0, 200,0), (255, 204, 204), 'Parks', 15, WHITE)
-    Parks.action(game_quit)
+    Parks.action(Park1)
     # buttons menue
-    Zoom_in = Button(50, 40, 0, 295, (255, 128, 0), (255, 204, 204), '+', 15, WHITE)
-    Zoom_in.action(game_quit)
-    Zoom_out = Button(50, 40, 0, 335, (255, 128, 0), (255, 204, 204), '-', 15, WHITE)
-    Zoom_out.action(game_quit)
-    Exit = Button(50, 40, 0, 385, (102, 178, 255), (255, 204, 204), 'Exit', 15, WHITE)
+    Exit = Button(50, 40, 0, 295, (102, 178, 255), (255, 204, 204), 'Exit', 15, WHITE)
     Exit.action(game_quit)
     # tourism
     tourism = random.randint(1,1000)
-    if tourism == 1000000000000000:
+    if tourism == 1000:
         people = random.randint(2,5)
         population += people
+    # what they bring with them
+    count = 1
+    for z in range(people):
+        happiness += random.randint(0, 5)
+        count += 1
+        if count == people:
+            break
+        list = ("food", "water", "stone", "wood", "glass", "gold")
+        give = random.choice(list)
+        much = random.randint(1,5)
+        if give == "food":
+            food += much
+        if give == "water":
+            water += much
+        if give == "stone":
+            stone += much
+        if give == "wood":
+            wood += much
+        if give == "glass":
+            glass += much
+        if give == "gold":
+            gold += much
     # print tourism
     pygame.draw.rect(screen,(0,0,0), pygame.Rect(58, 60, 170, 30))
     tourism_font = pygame.font.SysFont('times', 20)
-    tourism_text = tourism_font.render(str(people) + ' Tours have arrived',1, (255,255,255))
+    if people >= 1:
+        display_text = people
+    tourism_text = tourism_font.render(str(display_text) + ' Tours have arrived',1, (255,255,255))
     screen.blit(tourism_text, (60, 60))
+    # people leaving
+    if happiness <= 429 and population > 0 or housed <= population:
+        people_leaving = random.randint(1, 300)
+        if people_leaving == 300:
+            population -= 1
+            if happiness > 0:
+                happiness -= 1
+        elif people_leaving <= 50:
+            people_staying = random.randint(1, 100)
+            if people_leaving == 100:
+                population += 1
+                if happiness > 0:
+                    happiness += 1
+    else:
+        people_staying = random.randint(1, 100)
+        if people_staying == 100:
+            population += 1
+            if happiness > 0 and housed >= population:
+                happiness += 1
     # win
     if food == 999 or water == 999 or stone == 999 or wood == 999 or glass == 999 or gold == 999 or population == 999:
         end_game_font = pygame.font.SysFont('times', 100)
         end_game_text = end_game_font.render('You have won!!', 1, (255, 255, 255))
         screen.blit(end_game_text, (100, 300))
+        running = False
     # update
+    people = 0
     pygame.display.update()
