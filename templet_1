@@ -1,0 +1,86 @@
+import random
+from ursina import *
+from ursina.prefabs.first_person_controller import FirstPersonController
+
+
+# death
+count = 0
+def update():
+    global count
+    # gravity
+    hit_info = Box.intersects()
+    if hit_info.hit:
+        Box.y += 0.1
+    # pick up box
+    if held_keys['left mouse']:
+        Box.y = player.y + 2
+        Box.x = player.x
+        Box.z = player.z + 3
+    else:
+        Box.y -= 0.1
+    # respond box
+    if Box.y < 0.1:
+        Box.position = (random.randint(0,30), 1, random.randint(0,30))
+    # death
+    if player.y < 0:
+        count += 1
+        player.y = -2
+        player.rotation_z += 1
+        if player.rotation_z >= 50:
+            player.rotation_z = 50
+    else:
+        player.rotation_z = 0
+    # respond
+    if count == 100:
+        count = 0
+        player.position = (random.randint(0,30), 3, random.randint(0,30))
+        player.rotation_z = 0
+
+app = Ursina()
+class Voxel(Button):
+    def __init__(self, position=(0,0,0)):
+        super().__init__(
+            parent = scene,
+            position = position,
+            model = 'cube',
+            texture = 'texture/walltexture.jpgf8e1ee5c-aa56-40f9-986a-a583fbad830bLarge.jpg',
+            highlight_color = color.lime,
+            collider='box'
+        )
+
+
+    def input(self, key):
+        if self.hovered:
+            if key == 'right mouse down':
+                destroy(self)
+
+
+# block
+Box = Entity(model = 'cube', position = (10,1,10), collider = 'box', texture = 'white_cube', color = color.blue)
+# water
+water = Entity(model = 'cube', position=(18.5,-1,17.5), scale = (38,2,36),color = color.rgb(139,69,19), texture = 'texture/Water_Texture.jpg')
+water_floor = Entity(model = 'cube', position=(18.5,-2,17.5), scale = (38,0.01,36), collider = 'box', texture = 'texture/f5db7d60fcf16a9a695011e2ee15fdf7--coppens-black-tiles.jpg')
+# walls
+wall = Entity(model ='cube',position= (-1,5,17.5),scale = (1,10,36), texture = 'white_cube', collider='box')
+wall1 = Entity(model ='cube',position= (38,5,17.5),scale = (1,10,36), texture = 'white_cube', collider='box')
+wall2 = Entity(model ='cube',position= (18.5,5,36),scale = (1,10,38), texture = 'white_cube', rotation_y = 90, collider='box')
+wall3 = Entity(model ='cube',position= (18.5,5,-1),scale = (1,10,38), texture = 'white_cube', rotation_y = 90, collider='box')
+# floor
+h1 = 0
+for w in range(18):
+    for h in range(18):
+        R = random.randint(1,200)
+        if R <= 30:
+            w += 1
+        if R > 30:
+            for z in range(2):
+                for x in range(2):
+                    floor = Entity(model = 'cube', position=(x + w + w,-0.05,z + h1), scale = 1, collider = 'box', texture = 'texture/f5db7d60fcf16a9a695011e2ee15fdf7--coppens-black-tiles.jpg')
+        if w > 30:
+            break
+        h1 += 2
+    h1 = 0
+
+player = FirstPersonController(position= (10,2,10))
+Sky(color = color.blue)
+app.run()
