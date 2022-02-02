@@ -1,0 +1,330 @@
+import random
+import time
+from colorama import init
+from termcolor import colored
+init()
+# info
+money = 300
+total_chickens = 0
+total_eggs = 0
+total_feed = 0
+chicken_meet = 0
+incubator = 0
+transfer = 0
+# coop
+clean_level = 100
+water = 0
+food = 0
+eggs = 0
+# shop
+buy = False
+cart = []
+amount = 0
+egg_price = round(random.uniform(1,3),2)
+chickenFeed_price = round(random.uniform(1,12),2)
+chicken_price = round(random.uniform(1,24),2)
+num1,num2,num3 = 0,0,0
+# clock
+day = 1
+month = 1
+year = 1
+while True:
+    time.sleep(1)
+    print('*' * 66)
+    print('next day'.center(66))
+    # clock
+    day += 1
+    if day == 30:
+        day = 0
+        month += 1
+    if month == 12:
+        month = 0
+        year += 1
+    print('day: ',day,'/',month,'/',year)
+    # weather
+    if month <= 6:
+        temp = round(random.uniform(0, 90 - month), 1)
+    if month >= 6 and month < 11:
+        temp = round(random.uniform(0 + month, 90), 1)
+    if month <= 11:
+        temp = round(random.uniform(0, 90 - month), 1)
+    print('the temperature is:',temp)
+
+    # update
+    money = round(money, 2)
+    total_eggs = total_eggs
+    total_feed = total_feed
+    total_chickens = total_chickens
+
+    # daly update
+    print('*' * 66)
+    print('you have:')
+    print('money:', money)
+    print('total chickens', total_chickens)
+    print('total feed', total_feed)
+    print('total eggs', total_eggs)
+    print('total chicken meet', chicken_meet)
+    print('water level',water)
+    print('food level',food)
+    print('clean level',clean_level)
+
+    # death
+    if total_chickens > 0:
+        for num in range(total_chickens):
+            # food
+            if food < 10:
+                death = random.randint(0,10)
+                if death == 0:
+                    print(colored('<death> you have lost a chicken', 'red'))
+                    total_chickens -= 1
+            # water
+            if water < 10:
+                death = random.randint(0,10)
+                if death == 0:
+                    print(colored('<death> you have lost a chicken', 'red'))
+                    total_chickens -= 1
+            # coop conditions
+            if clean_level < 50:
+                clean_level -= 1
+                death = random.randint(1,100 - clean_level)
+                if death == 1:
+                    print(colored('<death> you have lost a chicken', 'red'))
+                    total_chickens -= 1
+            # temp
+            if temp <= 0:
+                death = random.randint(0,1)
+                if death == 1:
+                    print(colored('<death> you have lost a chicken', 'red'))
+                    total_chickens -= 1
+            if temp > 0 and temp < 90:
+                death = random.randint(0, 100)
+                if death == 1:
+                    print(colored('<death> you have lost a chicken', 'red'))
+                    total_chickens -= 1
+            if temp > 90:
+                print(colored('<death> you have lost a chicken', 'red'))
+                death = random.uniform(0,1)
+                if death == 1:
+                    total_chickens -= 1
+
+    # daly activities
+    print('clean coop | feed chickens | fill water | remove chickens | sell items | check incubator')
+    daly = input('what would you like to do? ')
+    daly.lower().strip()
+    if daly == 'clean coop':
+        if clean_level < 100:
+            clean_level += 10
+            print('you now cleaned the coop')
+        else:
+            print('the clean level is maxed out')
+    if daly == 'feed chickens':
+        if food < 100 and total_feed > 0:
+            food += 50
+            total_feed -= 1
+            print('you now filled up the food dish')
+        if food > 100 and total_feed > 0:
+            print('the food level is maxed out')
+        else:
+            print('you only have',total_feed,'feed')
+    if daly == 'fill water':
+        if water < 100:
+            water += 50
+            clean_level += 1
+            print('you now filled up the water dish')
+        else:
+            print('the water level is maxed out')
+    if daly == 'remove chickens' and total_chickens > 0:
+        many = int(input('how many would you like to remove? '))
+        if many > total_chickens:
+            print('sorry you only have',total_chickens)
+        else:
+            print('you have removed', many, 'chickens')
+            for x in range(many):
+                print(colored('<death> you have lost a chicken', 'red'))
+            total_chickens -= many
+            chicken_meet += many
+    if daly == 'sell items':
+        print('eggs | chickens | chicken feed | chicken meet')
+        sell = input('what would you like to sell? ')
+        sell.strip().lower()
+        if sell == 'eggs':
+            if total_eggs > 0:
+                sell_total = int(input('how many? '))
+                if sell_total <= total_eggs:
+                    money += egg_price * sell_total
+                    total_eggs -= sell_total
+                else:
+                    print('you only have',total_eggs,'eggs')
+            else:
+                print('you only have', total_eggs,'eggs')
+        if sell == 'chickens':
+            if total_chickens > 0:
+                sell_total = int(input('how many? '))
+                if sell_total <= total_chickens:
+                    money += chicken_price * sell_total
+                    total_chickens -= sell_total
+                else:
+                    print('you only have',total_chickens,'chickens')
+            else:
+                print('you only have', total_chickens,'chickens')
+        if sell == 'chicken feed':
+            if total_feed > 0:
+                sell_total = int(input('how many? '))
+                if sell_total <= total_feed:
+                    money += chickenFeed_price * sell_total
+                    total_feed -= sell_total
+                else:
+                    print('you only have',total_feed,'feed')
+            else:
+                print('you only have', total_feed,'feed')
+        if sell == 'chicken meet':
+            if chicken_meet > 0:
+                sell_total = int(input('how many? '))
+                if sell_total <= chicken_meet:
+                    money += random.uniform(1,5) * sell_total
+                    total_chickens -= sell_total
+                else:
+                    print('you only have',chicken_meet,'chicken meet')
+            else:
+                print('you only have', chicken_meet,'chicken meet')
+
+    # incubator
+    if year % 2 and incubator > 0:
+        for x in range(incubator):
+            R = random.randint(0, 2)
+            if R == 0:
+                transfer += 1
+                total_chickens += 1
+            if R == 1:
+                print(colored('<death> you have lost a chicken', 'red'))
+                total_chickens -= 1
+                incubator -= 1
+    if daly == 'check incubator':
+        if incubator == 0:
+            print('you do not have any chickens in this area')
+        else:
+            print('you have',incubator,'chickens in the incubator')
+            print(transfer,'are ready to be transferred')
+            if transfer > 0:
+                transfer_coop = input('would you like to transfer? ')
+                transfer_coop.strip().lower()
+                if transfer_coop == 'yes':
+                    incubator -= transfer
+        if total_eggs > 0:
+            add = input('would you like to add a egg to the incubator? ')
+            add.strip().lower()
+            if add == 'yes':
+                incubator_add = int(input('how many? '))
+                if incubator_add > total_eggs:
+                    print('sorry, you only have',total_eggs,'eggs')
+                else:
+                    incubator += incubator_add
+
+    # update
+    money = round(money, 2)
+    total_eggs = total_eggs
+    total_feed = total_feed
+    total_chickens = total_chickens
+
+    # daly update
+    print('*' * 66)
+    print('you have:')
+    print('money:', money)
+    print('total chickens', total_chickens)
+    print('total feed', total_feed)
+    print('total eggs', total_eggs)
+    print('total chicken meet', chicken_meet)
+    print('water level', water)
+    print('food level', food)
+    print('clean level', clean_level)
+
+    # shop
+    shop = input('would you like to shop? ')
+    shop.lower().strip()
+    if shop == 'yes':
+        buy = True
+    if buy == True:
+        while buy:
+            print('what would you like to get? ')
+            print('eggs | chicken feed | chickens | buy')
+            get = input('> ')
+            get.lower().strip()
+            if get == 'buy':
+                print('your cart: \n',cart)
+                print('that will be: $' + str(round(amount, 2)))
+                if money >= round(amount, 2):
+                    money -= round(amount, 2)
+                    cart = []
+                    amount = 0
+                    total_eggs += num1
+                    total_feed += num2
+                    total_chickens += num3
+                    print('you now have $' + str(money))
+                    num1, num2, num3 = 0, 0, 0
+                    buy = False
+                else:
+                    cart = []
+                    amount = 0
+                    print('sorry, you have', money, 'and the price is:', amount)
+                    num1,num2,num3 = 0,0,0
+                    buy = False
+            if get == 'eggs' or get == 'chicken feed' or get == 'chickens':
+                how_much = int(input('how manny would you like to get? '))
+                if get == 'eggs':
+                    amount += how_much * egg_price
+                    num1 += 1
+                    cart.append('eggs: ' + str(how_much) + ' ' + str(egg_price))
+                if get == 'chicken feed':
+                    amount += how_much * chickenFeed_price
+                    num2 += 1
+                    cart.append('chicken feed: ' + str(how_much) + ' ' + str(chickenFeed_price))
+                if get == 'chickens':
+                    num3 += 1
+                    amount += how_much * chicken_price
+                    cart.append('chicken: ' + str(how_much) + ' ' + str(chicken_price))
+
+    # chicken update
+    if total_chickens > 0:
+        for x in range(total_chickens):
+            food -= 1
+            water -= 1
+            clean_level -= 5
+            egg_production = random.randint(0,1)
+            if egg_production == 1:
+                total_eggs += random.randint(0,6)
+
+    # block
+    if money < 0:
+        money = 0
+    if total_chickens < 0:
+        total_chickens = 0
+    if total_feed < 0:
+        total_feed = 0
+    if total_eggs < 0:
+        total_eggs = 0
+    if chicken_meet < 0:
+        chicken_meet = 0
+    if water < 0:
+        water = 0
+    if food < 0:
+        food = 0
+    if clean_level < 0:
+        clean_level = 0
+
+    # update
+    money = round(money, 2)
+    total_eggs = total_eggs
+    total_feed = total_feed
+    total_chickens = total_chickens
+
+    # daly update
+    print('*' * 66)
+    print('you have:')
+    print('money:', money)
+    print('total chickens', total_chickens)
+    print('total feed', total_feed)
+    print('total eggs', total_eggs)
+    print('total chicken meet', chicken_meet)
+    print('water level', water)
+    print('food level', food)
+    print('clean level', clean_level)
