@@ -1,0 +1,120 @@
+import random
+
+from ursina import *
+# lists
+abc = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z',' ']
+punctuation = ['!', '(', ')', '-', '[', ']', '{', '}', ';', ':', "'", '"', ',', '<', '>', '.', '/', '?', '@', '#', '$', '%', '^', '&', '*', '_', '~', ' ']
+
+# title
+title_word = ''
+for x in range(1):
+    for x in range(random.randint(1,44)):
+        R = random.randint(0,2)
+        if R == 0:
+            title_word = title_word + random.choice(abc)
+        if R == 1:
+            title_word = title_word + random.choice(punctuation)
+        if R == 2:
+            title_word = title_word + str(random.randint(0,9))
+# author
+name = ''
+for x in range(1):
+    for x in range(random.randint(1,44)):
+        R = random.randint(0,2)
+        if R == 0:
+            name = name + random.choice(abc)
+        if R == 1:
+            name = name + random.choice(punctuation)
+        if R == 2:
+            name = name + str(random.randint(0,9))
+#-----------------------------------------------------------------------
+# text on the pages
+tp = 0
+def update():
+    global tp, count, y, context
+    if count == 2:
+        tp += 1
+    # ______left_____
+    if tp < random.randint(1,11) and tp > 0:
+        text1 = ''
+        for x in range(1):
+            for x in range(random.randint(44, 44)):
+                R = random.randint(0, 2)
+                if R == 0:
+                    text1 = text1 + random.choice(abc)
+                if R == 1:
+                    text1 = text1 + random.choice(punctuation)
+                if R == 2:
+                    text1 = text1 + str(random.randint(0, 9))
+        context.text = text1
+        y -= 0.05
+
+# pages
+page_number = random.randint(1,9609000)
+t = 0
+count = 0
+def previs_page():
+    global page_number1, count,page_number2, page1, page2, t
+    count -= 1
+    # display the page number
+    if count > -1:
+        count -= 1
+        page_number2.text = str(count)
+        count -= 1
+        page_number1.text = str(count)
+        t += 1
+    if count < 0:
+        # display cover
+        title.text = name.title()
+        author.text = title_word.title()
+        page_number1.text = ''
+        page_number2.text = ''
+        page1.position = (0, 0,1)
+        page2.position = (0,0,1)
+        middle.position = (0,0,1)
+        next.position = (0.3,-0.3)
+        previs.position = (100,100,1)
+
+y = 0
+def Next_page():
+    global page_number1, count, page_number2, page_number, t, y
+    # display the page number
+    page_number -= 1
+    count += 1 + t
+    page_number1.text = str(count)
+    count += 1
+    page_number2.text = str(count)
+    t = 0
+    # changing the text
+    title.text = ''
+    author.text = ''
+    if count == 1 or count == 2:
+        # changing the page position
+        page1.position = (-2.7, 0,-1)
+        page2.position = (2.7,0,-1)
+        middle.position = (0.02,0,-2)
+        previs.position =(-0.63, -0.3)
+        previs.on_click = previs_page
+        next.x = 0.63
+
+# app
+app = Ursina()
+#_________________book_______________________________________
+# cover
+cover = Entity(model = 'quad', scale = (5.5,5.5), position = (0,0))
+title = Text(text = title_word.title(), position = (-0.3,0.3),color = color.black)
+author = Text(text = name.title(), position = (-0.3,-0.2),color = color.black)
+page_number1 = Text(text = '', position=(-0.6, 0.3), color = color.black)
+page_number2 = Text(text = '', position=(0.6, 0.3), color=color.black)
+next = Button(model = 'quad', scale = 0.1, texture = 'arrow_right',position = (0.3,-0.3), color = color.lime)
+# cover image
+page1 = Entity(model = 'quad', scale=(5.5, 5.5), position = (0,0), color = color.white)
+page2 = Entity(model = 'quad', scale = (5.5,5.5), position = (0,0), color = color.white)
+middle = Entity(model = 'quad', scale = (0.05,5.3), position = (0,0,1), color = color.black)
+previs = Button(model='quad', scale=0.1, texture='arrow_right', position=(3,3,1), color=color.lime,rotation_z=180)
+next.on_click = Next_page
+# text
+for x in range(8):
+    context = Text(text=''.capitalize(), position=(-0.6, 0.25 + y), color=color.black)
+    y -= 0.05
+app.run()
