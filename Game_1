@@ -1,0 +1,194 @@
+import random
+import time
+from ursina import *
+from ursina.prefabs.health_bar import HealthBar
+
+move = True
+i = 0
+count = 0
+def update():
+    global i, move, count, critical
+    i += 1
+    count += 1
+    # over time heal
+    if count == 100:
+        count = 0
+        if PH.value < 100:
+            PH.value += 1
+            critical.text = 'Heal'
+            critical.color = color.gold
+            critical.y = 0.2
+        else:
+            critical.text = ''
+        R = random.randint(1,100)
+        if R == 1:
+            if PH.value < 100:
+                PH.value += 5
+                critical.text = 'Heal'
+                critical.color = color.gold
+                critical.y = 0.2
+    # coalition
+    hit_info = player.intersects(bad_guy_1)
+    if hit_info.hit:
+        move = False
+        R = random.randint(0,1)
+        if R == 0:
+            time.sleep(0.15)
+            attack = random.randint(0,5)
+            PH.value -= attack
+            if attack > 3:
+                critical.text = 'critical hit'
+                critical.color = color.red
+                critical.y = 0.1
+            if attack < 3 and attack > 0:
+                critical.text = ''
+            if attack == 0:
+                critical.text = 'miss'
+        if R == 1:
+            attack = random.randint(0, 5)
+            BH.value -= attack
+            if attack > 3:
+                critical.text = 'critical hit'
+                player.color = color.orange
+                critical.y = 0
+            if attack < 3 and attack > 0:
+                critical.text = ''
+            if attack == 0:
+                critical.text = 'miss'
+        # death
+        if BH.value <= 0:
+            BH.value = 100
+            bad_guy_1.position = (random.randint(0, 6), random.randint(0, 6))
+            critical.text = ''
+            move = True
+        if PH.value <= 0:
+            BH.value = 100
+            PH.value = 100
+            player.position = (0,0,-1.1)
+            bad_guy_1.position = (random.randint(0,6),random.randint(0,6))
+            critical.text = ''
+            move = True
+    # move
+    if move == True:
+        # -------------------- X --------------------
+        # -------------------- X7
+        if i >= 25 and mouse.x > 0.314815 and mouse.y < 0.434028 and player.x < 6:
+            i = 0
+            player.x += 1
+        if i >= 25 and mouse.x > 0.314815 and mouse.x < 0.434028 and player.x > 6:
+            i = 0
+            player.x -= 1
+        # -------------------- X6
+        if i >= 25 and mouse.x > 0.190972 and mouse.x < 0.314815 and player.x < 5:
+            i = 0
+            player.x += 1
+        if i >= 25 and mouse.x > 0.190972 and mouse.x < 0.314815 and player.x > 5:
+            i = 0
+            player.x -= 1
+        # -------------------- X5
+        if i >= 25 and mouse.x > 0.0648148 and mouse.x < 0.190972 and player.x < 4:
+            i = 0
+            player.x += 1
+        if i >= 25 and mouse.x > 0.0648148 and mouse.x < 0.190972 and player.x > 4:
+            i = 0
+            player.x -= 1
+        # -------------------- X4
+        if i >= 25 and mouse.x > -0.0601852 and mouse.x < 0.0648148 and player.x < 3:
+            i = 0
+            player.x += 1
+        if i >= 25 and mouse.x > -0.0601852 and mouse.x < 0.0648148 and player.x > 3:
+            i = 0
+            player.x -= 1
+        # -------------------- X3
+        if i >= 25 and mouse.x > -0.1875 and mouse.x < -0.0601852 and player.x < 2:
+            i = 0
+            player.x += 1
+        if i >= 25 and mouse.x > -0.1875 and mouse.x < -0.0601852 and player.x > 2:
+            i = 0
+            player.x -= 1
+        # -------------------- X2
+        if i >= 25 and mouse.x > -0.310185 and mouse.x < -0.19213 and player.x < 1:
+            i = 0
+            player.x += 1
+        if i >= 25 and mouse.x > -0.310185 and mouse.x < -0.19213 and player.x > 1:
+            i = 0
+            player.x -= 1
+        # -------------------- X1
+        if i >= 25 and mouse.x < -0.310185 and player.x > 0:
+            i = 0
+            player.x -= 1
+        # -------------------- Y --------------------
+        # -------------------- Y7
+        if i >= 25 and mouse.y > 0.313657 and mouse.y < 0.435185 and player.y < 6:
+            i = 0
+            player.y += 1
+        if i >= 25 and mouse.y > 0.313657 and mouse.y < 0.435185 and player.y > 6:
+            i = 0
+            player.y -= 1
+        # ______________________ Y6
+        if i >= 25 and mouse.y > 0.19213 and mouse.y < 0.313657 and player.y < 5:
+            i = 0
+            player.y += 1
+        if i >= 25 and mouse.y > 0.192129 and mouse.y < 0.313657 and player.y > 5:
+            i = 0
+            player.y -= 1
+        # ______________________ Y5
+        if i >= 25 and mouse.y > 0.0671296 and mouse.y < 0.192129 and player.y < 4:
+            i = 0
+            player.y += 1
+        if i >= 25 and mouse.y > 0.0671296 and mouse.y < 0.192129 and player.y > 4:
+            i = 0
+            player.y -= 1
+        # ______________________ Y4
+        if i >= 25 and mouse.y > -0.0601852 and mouse.y < 0.0671296 and player.y < 3:
+            i = 0
+            player.y += 1
+        if i >= 25 and mouse.y > -0.0601852 and mouse.y < 0.0671296 and player.y > 3:
+            i = 0
+            player.y -= 1
+        # ______________________ Y3
+        if i >= 25 and mouse.y > -0.184028 and mouse.y < -0.0601852 and player.y < 2:
+            i = 0
+            player.y += 1
+        if i >= 25 and mouse.y > -0.184028 and mouse.y < -0.0601852 and player.y > 2:
+            i = 0
+            player.y -= 1
+        # ______________________ Y2
+        if i >= 25 and mouse.y > -0.311343 and mouse.y < -0.184028 and player.y < 1:
+            i = 0
+            player.y += 1
+        if i >= 25 and mouse.y > -0.311343 and mouse.y < -0.184028 and player.y > 1:
+            i = 0
+            player.y -= 1
+        # ______________________ Y1
+        if i >= 25 and mouse.y < -0.314815 and player.y > 0:
+            i = 0
+            player.y -= 1
+
+app = Ursina()
+class Voxel(Button):
+    def __init__(self, position=(0,0,0)):
+        super().__init__(
+            parent = scene,
+            position = position,
+            model = 'cube',
+            texture = 'white_cube',
+            highlight_color = color.lime,
+        )
+
+for y in range(7):
+    for x in range(7):
+        voxel = Voxel(position=(x,y))
+
+# heath bars
+PH = HealthBar(bar_color=color.green, scale=(0.2, 0.03))
+BH = HealthBar(bar_color=color.red, scale=(0.2, 0.03), position=(-0.8, 0.4))
+critical = Text(text = '',color = color.red,position=(-0.8, 0))
+# player
+player = Entity(model = 'cube',z = -1.1,color = color.orange,texture = 'white_cube', collider = 'box')
+# bad guys
+bad_guy_1 = Entity(model = 'cube', z = - 1, position = (random.randint(0,6),random.randint(0,6)),color = color.white, collider = 'box',texture = 'white_cube')
+# cam
+camera.y = 3
+camera.x = 3
+app.run()
