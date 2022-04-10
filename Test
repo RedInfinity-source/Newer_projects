@@ -1,0 +1,21 @@
+import random
+
+from ursina import *
+def update():
+    if held_keys['left mouse']:
+        E.position = mouse.position
+app = Ursina()
+E = Entity(model = 'cube',parent = camera.ui,scale = 0.05,color = color.clear)
+for y in range(16):
+    for x in range(16):
+        E1 = duplicate(E,color = color.rgb(0,0,random.randint(0,255)))
+        E1.add_script(SmoothFollow(target = E, offset= [x + 1,y,0],speed = random.uniform(0.1,1)))
+for y in range(16):
+    for x in range(16):
+        E1 = duplicate(E,color = color.rgb(0,random.randint(0,255),0))
+        E1.add_script(SmoothFollow(target = E, offset= [x + 1,y,-1],speed = random.uniform(0.1,1)))
+for y in range(16):
+    for x in range(16):
+        E1 = duplicate(E,color = color.rgb(random.randint(0,255),0,0))
+        E1.add_script(SmoothFollow(target = E, offset= [x + 1,y,-2],speed = random.uniform(0.1,1)))
+app.run()
