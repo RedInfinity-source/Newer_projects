@@ -1,0 +1,51 @@
+import time,random,enchant
+#make the words
+abc = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z']
+d = enchant.Dict("en_US")
+
+# points
+points = 0
+
+# make words
+word = ''
+def Word():
+    global word
+    while True:
+        for x in range(round(random.uniform(4,45 + points))):
+            word += random.choice(abc)
+        if d.check(word) == True:
+            print(word.strip())
+            break
+        else:
+            word = ''
+
+# game
+avrige_time = 0
+def Speed():
+    global avrige_time, points
+    # points display
+    print('')
+    print('you currently have', points,'points')
+    Word()
+    start = time.time()
+    # user input
+    user = input('> ')
+    # check if the udser typed the right word
+    if user == word:
+        points += 1
+        print('you have earned 1 point. you know have:',points,'points')
+    else:
+        if points > 0:
+            points -= 1
+            print('you have loss 1 point. you know have:', points,'points')
+    # display points
+    end = time.time()
+    avrige_time += round(end - start)
+
+while avrige_time < 100:
+    Speed()
+
+# end of the game
+print('')
+print('you have', points, 'points')
+print('it took you:',avrige_time,'milliseconds')
