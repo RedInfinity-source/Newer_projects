@@ -4,7 +4,7 @@ player_room = ''
 def Player_location():
     global player_room
     # tell player what room they are in
-    room_list = ['dinning room', 'living room', 'thither room', 'bed room', 'mud room', 'storage room', 'map room','hallway','kitchen', 'office', 'closet', 'garage', 'liberty']
+    room_list = ['attic','celler','dinning room', 'living room', 'thither room', 'bed room', 'mud room', 'storage room', 'map room','hallway','kitchen', 'office', 'closet', 'library','laboratory']
     player_room = random.choice(room_list)
     print('you are in the',player_room)
 
@@ -13,31 +13,35 @@ def Player_location():
 room_furniture = []
 def Furniture():
     # creating furniture in the room
-    if player_room == 'dinning room':
-        furniture_list = ['table','plate','candle','cup','chair','radio','plaint','shelf','cabinet','lamp','bookshelf','painting']
+    if player_room == 'laboratory':
+        furniture_list = ['book','map','table', 'candle', 'chair','shelf', 'cabinet', 'lamp','bookshelf','chest','box','painting','bed','rack']
+    elif player_room == 'celler':
+        furniture_list = ['Barrel','wine bottle','table', 'candle', 'chair', 'radio','shelf', 'cabinet', 'lamp','bookshelf','chest','box','painting','rack']
+    elif player_room == 'dinning room':
+        furniture_list = ['wine bottle','table','plate','candle','cup','chair','radio','plaint','shelf','cabinet','lamp','bookshelf','painting']
     elif player_room == 'living room':
-        furniture_list = ['table','candle', 'chair', 'radio', 'plaint', 'shelf', 'cabinet','couch','lamp','bookshelf','painting']
+        furniture_list = ['wine bottle','table','candle', 'chair', 'radio', 'plaint', 'shelf', 'cabinet','couch','lamp','bookshelf','painting']
     elif player_room == 'thither room':
-        furniture_list = ['candle', 'chair', 'plaint','couch','lamp','stage','painting']
+        furniture_list = ['candle', 'chair', 'plaint','couch','lamp','stage','painting','wine bottle']
     elif player_room == 'bed room':
-        furniture_list = ['candle', 'chair', 'plaint','bed','lamp','radio','desk','chest','dresser','rack','bookshelf','painting','box']
+        furniture_list = ['wine bottle','candle', 'chair', 'plaint','bed','lamp','radio','desk','chest','dresser','rack','bookshelf','painting','box']
     elif player_room == 'mud room':
         furniture_list = ['candle', 'plaint','lamp','radio','sink','dryer','washer','rack','chest']
     elif player_room == 'map room':
-        furniture_list = ['candle', 'plaint','lamp','radio','map','chest','cabinet','bookshelf']
+        furniture_list = ['candle', 'plaint','lamp','radio','map','chest','cabinet','bookshelf','book']
     elif player_room == 'kitchen':
-        furniture_list = ['sink','candle', 'plaint','lamp','radio','cabinet','refrigerator','dishwasher','rack','plate','cup','oven']
+        furniture_list = ['wine bottle','sink','candle', 'plaint','lamp','radio','cabinet','refrigerator','dishwasher','rack','plate','cup','oven']
     elif player_room == 'office':
-        furniture_list = ['candle', 'plaint','lamp','radio','cabinet','paper','bookshelf','chair','desk','painting','box']
-    elif player_room == 'liberty':
-        furniture_list = ['candle', 'plaint','lamp','radio','cabinet','paper','bookshelf','chair','book','news paper','desk','painting','box']
+        furniture_list = ['candle', 'plaint','lamp','radio','cabinet','paper','bookshelf','chair','desk','painting','box','map']
+    elif player_room == 'library':
+        furniture_list = ['wine bottle','candle', 'plaint','lamp','radio','cabinet','paper','bookshelf','chair','book','news paper','desk','painting','box']
     elif player_room == 'hallway':
-        furniture_list = ['candle', 'plaint','lamp','cabinet','bookshelf','chair','book','news paper','table','painting','chest','box']
+        furniture_list = ['candle', 'plaint','lamp','cabinet','bookshelf','chair','book','news paper','table','painting','chest','box','wine bottle','rack','radio']
     else:
-        furniture_list = ['table', 'plate', 'candle', 'chair', 'radio', 'plaint', 'shelf', 'cabinet', 'lamp','bookshelf','chest','box','painting']
+        furniture_list = ['table', 'plate', 'candle', 'chair', 'radio', 'plaint', 'shelf', 'cabinet', 'lamp','bookshelf','chest','box','painting','news paper','book','rack']
     # telling the use what's in the room
     print('in the room you the found: ')
-    while len(room_furniture) < random.randint(1,10):
+    while len(room_furniture) < random.randint(1,5):
         furniture = random.choice(furniture_list)
         if furniture not in room_furniture:
             room_furniture.append(furniture)
@@ -69,7 +73,7 @@ def Code_Location():
         position = ['top', 'bottom', 'left', 'right', 'behind']
         pick = furniture_type
         list = ['shelf', 'cabinet', 'bookshelf', 'desk', 'chest', 'dresser', 'box', 'book', 'news paper',
-                'oven', 'dishwasher', 'refrigerator', 'dryer', 'washer']
+                'oven', 'dishwasher', 'refrigerator', 'dryer', 'washer','Barrel','wine bottle']
         if pick in list:
             position.append('inside')
         else:
@@ -89,6 +93,8 @@ def Code_Location():
             break
     # ----------------------- tell the user how many code are in the room
     print('in the room there are {} code(s)'.format(code_amount))
+    # this prints out the location of the codes
+    #print(code_location_list)
 
 #  number input
 def Number():
@@ -117,6 +123,7 @@ def Number():
                 break
             else:
                 print('sorry, but "{}" is not an option'.format(question))
+
 
 # found codes list
 found_list = []
